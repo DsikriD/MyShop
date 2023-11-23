@@ -1,0 +1,113 @@
+﻿@using MyShop_Utility;
+@model MyShop_Models.ViewModels.DetailsVM
+
+
+<div class="">
+    <form method="post">
+        <input asp-for="@Model.Product.Id" hidden/>
+        <div class="container background pt-4">
+            <div class="card border border-1 border-dark boxShd  RoundBoreder" style="">
+                    
+                <div class="card-body">
+                    <div class="container rounded p-1">
+                        <div class="row">
+
+                            
+                            <div class="col-3 p-1 text-center">
+                                <img src="@WC.ImagePath@Model.Product.Image" class="rounded img-thumbnail border border-1 border-dark boxShd w-75"/>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="row pe-3">
+
+                                    <div class="col-12 border-start border-end border-1 border-dark ">
+                                        <h3 class="text-dark ps-1 mt-3">@Model.Product.Name</h3>
+                                        <span class="ms-1 badge p-3 border text-dark" style="background-color:lavenderblush">@Model.Product.Category.Name </span>
+                                        <span class="badge p-3 border text-dark" style="background-color:azure">@Model.Product.ApplicationType.Name</span>
+                                        @if (User.IsInRole(WC.AdminRole))
+                                        {
+                                            <div class="col-6 ps-1">
+                                                Количество:
+                                            </div>
+                                            <div class="col-6 ps-1">
+                                                @if (Model.ExitsInCart)
+                                                {
+                                                    <input asp-for="Product.TempCount" disabled min="1" class="form-control"/>
+                                                }
+                                                else
+                                                {
+                                                    <input asp-for="Product.TempCount" min="1" class="form-control" />
+                                                }
+                                                <span asp-validation-for="Product.TempCount" class="text-danger"></span>
+                                            </div>
+                                        }
+                                        
+                                        <p class="text-secondary ps-1">@Html.Raw(Model.Product.Description)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-3">
+                                <div class="row border border-1 boxShd border-dark RoundBoreder position-fixed bg-white col-2">
+                                    <div class="col-12 text-center pt-2">@Model.Product.Name</div>
+                                    <h5 class="text-dark ps-3 mt-1 text-center">@string.Format("{0:c} ",@Model.Product.Price)</h5>
+                                        @if (Model.ExitsInCart)
+                                        {
+                                        <div class="col-12 text-center">
+                                            <a asp-action="RemoveFromCart" asp-route-id="@Model.Product.Id" class="btn btn-warning mb-3 form-control RoundBoreder btn-sm w-90 fw-bold " style="font-size:12px " ;>Удалить из корзины</a>
+                                            </div>
+                                        }
+                                        else
+                                        {   
+
+                                            <div class="col-12 text-center">
+                                            <button type="submit" class="btn btn-success btn-sm mb-3 form-control RoundBoreder fw-bold w-90" style=" font-size:12px ">Добавить в корзину</button>
+                                            </div>
+
+                                        }
+                                        
+                                </div>
+
+                                <div class="col-12 mb-2 mt-3">
+                                    
+                                </div>
+                            </div>
+
+                            
+                        </div>
+                    </div>
+                </div>
+                     
+            </div>
+        </div>
+
+        <div class="container mt-5 ps-xxl-5">
+            <div class="row">
+                <h4 class="fw-bold mb-3">Похожие товары</h4>
+
+                @foreach (var obj in Model.SimilarProducts)
+                    {
+                    <div class="col-2 border border-1 boxShd me-2 RoundBoreder mb-2 me-2">
+                        <div class="col-12">
+                            <img src="@WC.ImagePath@obj.Image" class=" img-fluid boxShd w-100  mt-3 p-0" />
+                        </div>
+                       <div class="col-12">
+                            <div class="fw-bold fs-5 mt-1">@obj.Price</div>
+                       </div>
+                       
+                       <div class="col-12">
+                            <div class="mt-1 text-muted ps-1 mb-2 me-2 overflow-hidden"> @obj.Name</div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <a asp-action="Details" asp-route-id="@obj.Id" class="btn btn-dark mb-2 ms-1 mt-2" style=" font-size:11px "> Детали</a>
+                        </div>
+                    </div>
+                    }
+            </div>
+        </div>
+
+
+    </form>
+</div>
+

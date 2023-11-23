@@ -1,0 +1,14 @@
+﻿@model MyShop_Models.OrderHeader
+<div class="text-center">
+    @if (Model != null)
+    {
+        <h1 class="text-info">Заказ создан</h1>
+        <p>Заказ #@Model.Id был успешно создан </p>
+    }
+    else
+    {
+    <h1 class="text-info"> Подтверждение запроса</h1>
+    <p>Мы получили ваш запрос, и кто-нибудь из нашей команды свяжется с вами в ближайшее время!</p>
+    <img src="/images/patio.png" width="10%"/>
+    }
+</div>

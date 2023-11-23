@@ -1,0 +1,112 @@
+﻿@using MyShop_Utility;
+@model IList<Product>
+
+
+@if (Model.Count() > 0)
+{
+    <form method="post">
+        <br />
+        <div class="bg-white">
+            <div class="container row">
+                <div class="card mt-3 border border-2 border-black ps-0 pe-0">
+                    <div class="card-header text-light row container m-0">
+                        <div class="col-5 text-black fs-6 pt-1">
+                            <i class="fa fa-shopping-cart"></i>&nbsp;
+                            Корзина
+                        </div>
+                        <div class="col-7 text-end pe-1">
+                            <a asp-action="Index" asp-controller="Home" class="btn btn-outline-info  btn-sm fw-bold">Продолжить покупки</a>
+                            <a asp-action="Clear" class="btn btn-outline-danger  btn-sm fw-bold">Отчистить корзину</a>
+                        </div>
+                    </div>
+                    <div class="card-body m-0">
+                        <div class="d-none d-lg-block">
+                            <div class="row mb-2 ps-2" style="color:#821f3d">
+                                <div class="col-lg-2">
+                                </div>
+                                <div class="col-6 col-lg-5 ms-3 ps-0">
+                                    Детали продукта
+                                </div>
+                                <div class="col-5 col-lg-2 ms-0 ps-1">
+                                    Цена
+                                </div>
+                                @if (User.IsInRole(WC.AdminRole)) {
+                                    <div class="col-5 col-lg-1 ms-0 ps-2">
+                                        Кол-во
+                                    </div>
+                                }
+                                <div class="col-3 col-sm-4 col-lg-1">
+                                </div>
+                            </div>
+                        </div>
+
+                        @{
+                            var OrderSum = 0.00;
+                        }
+
+                        @for (int i=0;i<Model.Count();i++)
+                        {
+                            <input hidden asp-for="@Model[i].Id"/>
+                            <div class="row h-30 rounded p-2">
+                                <div class="col-4 col-md-2 text-center p-2 border border-black rounded bg-light ms-1">
+                                    <img src="@WC.ImagePath@Model[i].Image" class="rounded" width="100"/>
+                                </div>
+
+                                <div class="col-3 col-lg-5 rounded ms-2 border border-black bg-light p-2">
+                                    <h5>@Model[i].Name</h5>
+                                    <div style="font-size:11px;">@Model[i].ShortDes</div>
+                                </div>
+                                <div class="col-2 col-lg-2 pt-lg-4  rounded ms-2 bg-light border border-black" style="font-size:11px">
+                                    <span style="font-size:17px;">@(Model[i].Price * Model[i].TempCount) руб.</span>
+                                </div>
+                                @if (User.IsInRole(WC.AdminRole))
+                                {
+                                    <div class="col-2 col-lg-1 pt-lg-4  rounded ms-2 bg-light border border-black" style="font-size:11px">
+                                        <input asp-for="@Model[i].TempCount" min="1" class="form-control" />
+                                        <span asp-validation-for="@Model[i].TempCount" class="text-danger"></span>
+                                    </div>
+                                }
+                                <div class="col-2 col-lg-1 pt-4 text-center bg-light border border-black rounded ms-2">
+                                    <a asp-action="Remove" asp-route-id="@Model[i].Id" class="btn btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            OrderSum += Model[i].Price * Model[i].TempCount;
+                        }
+                        <div class="card-footer border border-black rounded-3">
+                                <div class="row">
+                                @if (User.IsInRole(WC.AdminRole))
+                                {
+                                    <div class="col-3 col-md-3 pt-2 fw-bold">
+                                        Сумма заказа: @OrderSum .руб
+                                    </div>
+
+                                    <div class="col-4 col-md-3 offset-md-3">
+                                        <button type="submit" asp-action="UpdateCart" formmethod="post" name="Update" value="UpdateCart" 
+                                        class="btn btn-info form-control">
+                                            <span>Обновить корзину</span>
+                                        </button>
+                                    </div>
+                                }
+                                <div class="col-4 col-md-3">
+                                        <button type="submit" class="btn btn-success form-control">
+                                            <span>Заказать</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </form>
+}
+else
+{
+    <p>Пожалуйста, добавьте товар в корзину</p>
+}
+
+@section Scripts{
+    <partical name="_ValidationScriptsPartial" />
+}

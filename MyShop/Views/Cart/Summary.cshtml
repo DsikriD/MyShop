@@ -1,0 +1,222 @@
+﻿@model MyShop_Models.ViewModels.ProductUserVM
+
+
+<form id="payment-form" method="post">
+    <br/>
+    <div class="backgroundWhiteBorder">
+        <div class="container">
+            <div class="card">
+                <div class="card-header bg-dark text-light ml-0 ms-0 row container">
+                    <div class="col-6">
+                        <i class="fa fa-shopping-cart"></i> &nbsp;
+                        Итоги заказа
+                    </div>
+                    <div class="col-6 text-end">
+                        <a asp-action="Index" class="btm btn-outline-info btn-sm">Вернуться в корзину</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="container rouded p-2">
+                        <div class="row">
+                            
+                            <div class="col-12 col-lg-7 pb-4">
+                                <div class="row">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-info">Детали</span>
+                                    </h4>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Имя</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="ApplicationUser.Fullname" type="text" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Телефон</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="ApplicationUser.PhoneNumber" type="text" class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Эл. почта</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="ApplicationUser.Email" type="text" class="form-control" />
+                                    </div>
+                                </div>
+
+                                @if (User.IsInRole(MyShop_Utility.WC.AdminRole))
+                                {
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Улица</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="ApplicationUser.StreetAddress" required type="text" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Город</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="ApplicationUser.City" required type="text" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Страна</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="ApplicationUser.State" required type="text" class="form-control" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Индекс</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="ApplicationUser.PostCode" required type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                }
+
+                                </div>
+                           
+                            <div class="col-12 col-lg-5 row">
+                                <div class="col-12">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-info">Описание заказа:</span>
+                                    </h4>
+                                    <ul class="list-group mb-3">
+                                        @{
+                                            var OrderSum = 0.0;
+                                        }
+                                        @for (int i=0;i< Model.ProductList.Count();i++)
+                                        {
+                                            <input type="hidden" asp-for="@Model.ProductList[i].Id">
+                                            <input type="hidden" asp-for="@Model.ProductList[i].Name">
+                                            <input type="hidden" asp-for="@Model.ProductList[i].Price">
+                                            <input type="hidden" asp-for="@Model.ProductList[i].TempCount">
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <div>
+                                                <h6 class="my-0">@Model.ProductList[i].Name</h6>
+                                                    @if (User.IsInRole(MyShop_Utility.WC.AdminRole))
+                                                    {
+                                                        <small class="text-muted">Кол-во: @Model.ProductList[i].TempCount</small>
+                                                    }
+                                                    else
+                                                    {
+                                                        <small class="text-muted">Цена:@Model.ProductList[i].Price .руб</small>
+                                                    }
+                                                    
+                                            </div>
+                                                @if (User.IsInRole(MyShop_Utility.WC.AdminRole))
+                                                {
+                                                    <span class="text-muted">Цена: @(Model.ProductList[i].Price* Model.ProductList[i].TempCount) .руб</span>
+                                                }
+                                            </li>
+                                            OrderSum += Model.ProductList[i].Price * Model.ProductList[i].TempCount;
+                                        }
+                                        @if (User.IsInRole(MyShop_Utility.WC.AdminRole))
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between bg-light">
+                                                <small class="text-info">Итого:</small>
+                                                <strong class="text-info">@OrderSum .руб</strong>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                                @if (User.IsInRole(MyShop_Utility.WC.AdminRole))
+                                {
+                                    <div class="col-12">
+                                        <div class="wrapper">
+                                            <div class="checkout container">
+                                                <div id="dropin-container"></div>
+                                                <input type="hidden" id="nonce" name="payment_method_nonce" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-12 col-md-5 offset-md-7">
+                            @if (User.IsInRole(MyShop_Utility.WC.AdminRole))
+                            {
+                                <button class="btn btn-success form-control" onclick="return validateInput()" id="submit-button" type="submit">Подвердить заказ</button>
+                            }
+                            else{
+                                <button type="submit" class="btn btn-primary form-control" onclick="return validateInput()">Создать запрос</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://js.braintreegateway.com/web/dropin/1.40.2/js/dropin.min.js"></script>
+    <script>
+
+        var client_token = "@ViewBag.ClientToken";
+
+        var form = document.querySelector('#payment-form');
+
+        braintree.dropin.create({
+                        authorization: client_token,
+            container: '#dropin-container'
+        }, function (createErr, instance){
+            form.addEventListener('submit', function() {
+                event.preventDefault();
+
+                    instance.requestPaymentMethod(function(err,payload){
+                        document.getElementById('nonce').value = payload.nonce;
+                        form.submit();
+                    });
+            });
+        });
+
+
+        function validateInput() {
+            var app_name = document.getElementById("ApplicationUser_Fullname").value;
+            var app_phone = document.getElementById("ApplicationUser_PhoneNumber").value;
+            var app_email = document.getElementById("ApplicationUser_Email").value;
+            var app_street = document.getElementById("ApplicationUser_StreetAddress").value;
+            var app_city = document.getElementById("ApplicationUser_City").value;
+            var app_state = document.getElementById("ApplicationUser_State").value;
+            var app_postcode = document.getElementById("ApplicationUser_PostCode").value;
+
+            if (app_name.toString() == '' || app_phone.toString() == '' || app_email.toString() == '' || app_street.toString() == '' || app_city.toString() == '' || app_state.toString() == ''|| app_postcode.toString() == '')
+            {
+                Swal.fire({
+                    icon: "Ошибка",
+                    title: "Упс...",
+                    text: "Пожалуйста, заполните все поля",
+                })
+                return false;
+            }
+           
+            return true;
+        }
+
+
+    </script>
+}

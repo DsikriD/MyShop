@@ -1,0 +1,99 @@
+﻿@model MyShop_Models.ViewModels.InquiryVM
+
+<form method="post">
+    <input hidden asp-for="InquiryHeader.Id"/>
+    <br/>
+    <div class="bg-white container">
+        <div class="card">
+            <div class="card-header bg-dark text-light ms-0 row container">
+                <div class="col-12 d-none d-md-block col-md-6 pb-1 text-info">
+                    <i class="fas fa-shopping-cart"></i> &nbsp; Заказ №@Model.InquiryHeader.Id
+                </div>
+                <div class="col-12 col-md-4 offset-md-2 text-end">
+                    <a asp-action="Index" class="btn btn-outline-info form-control btn-sm">Венуться</a>
+                </div>
+            </div>
+
+            <div class="card-body pb-0">
+                <div class="container rounded p-2">
+                    <div class="row">
+                        <div class="col-12 col-lg-6 pb-4">
+                            <div class="row">
+                                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="text-info">Детали самовывоза</span>
+                                </h4>
+                            </div>
+                            <div class=" row my-1">
+                                <div class="col-3">Имя</div>
+                                <div class="col-9 ">
+                                    <input asp-for="InquiryHeader.Fullname" type="text" class="form-control" />
+                                    <span asp-validation-for="InquiryHeader.Fullname" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class=" row my-1">
+                                <div class="col-3">Телефон</div>
+                                <div class="col-9">
+                                    <input asp-for="InquiryHeader.PhoneNumber" type="text" class="form-control" />
+                                    <span asp-validation-for="InquiryHeader.Fullname" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class=" row my-1">
+                                <div class="col-3">Почта</div>
+                                <div class="col-9">
+                                    <input asp-for="InquiryHeader.Email" type="text" class="form-control" />
+                                    <span asp-validation-for="InquiryHeader.Fullname" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class=" row my-1">
+                                <div class="col-3">Дата заказа</div>
+                                <div class="col-9">
+                                    <input value="@Model.InquiryHeader.InquiryDate.ToShortDateString()" type="text" class="form-control" readonly />
+                                </div>
+                            </div>
+
+                            <div class="row my-1 pt-2">
+                                <div class="col-9 offset-3">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input type="submit" value="Добавить в корзину" class="btn btn-info form-control"/>
+                                        </div>
+
+                                        <div class="col">
+                                            <input type="submit" value="Удалить" class="btn btn-danger form-control"
+                                                   formaction="/Inquiry/Delete" formmethod="post" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-5 offset-lg-1">
+                            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-info">Итоги заказа</span>
+                            </h4>
+                            <ul class="list-group mb-3 container">
+                               
+                                @foreach(var prod in Model.InquiryDetail)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between p-2">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <h6 class="my-0 text-info">@prod.Product.Name</h6>
+                                                <small class="text-muted">Price: @prod.Product.Price .руб</small><br />
+                                            </div>
+                                            <div class="col-4">
+                                            </div>
+                                        </div>
+                                </li>
+                                }
+                            </ul>
+                            <br/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

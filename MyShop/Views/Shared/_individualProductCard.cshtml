@@ -1,0 +1,43 @@
+﻿@using MyShop_Utility;
+@model MyShop_Models.Product
+
+<div class="col-4 col-md-4 pb-3 filter @Model.Category.Name.Replace(' ','_')">
+    <!--КАРТОЧКА-->
+    <div class="card RoundBoreder boxShd h-100">
+        
+        <div class="text-center">
+            <img class="card-img-top img-rounded  mb-1 pt-5 pb-3 w-75 h-100" src="@WC.ImagePath@Model.Image" alt="Card image cap">
+        </div>
+
+        <div class="card-body pt-0 pb-0 row mb-0">
+            <div class="col-12 ps-3"><label class="float-start fs-6" style="font-family:sans-serif">@Model.Name</label></div>
+            <hr class="mb-0" />
+            <div class="col-auto ps-3 pt-1 pb-1 text-end"><label class="float-start fw-bold"><span class="text-primary h5">@string.Format("{0:c} ",@Model.Price)</span></label></div>
+        </div>
+
+
+        <div class="card-body ps-2 pe-2 pt-0 row">
+             <div class="col-6">
+                <span class="badge pb-1 border w-100 text-dark text-wrap" style="background-color:lavenderblush;">
+                    @Model.Category.Name
+                </span>
+            </div>
+            <div class="col-6 border-0">
+                <span class="badge pb-1 border w-100 text-dark text-wrap" style="background-color:aliceblue;">
+                    @Model.ApplicationType.Name
+                </span>
+            </div>
+            <div class="col-12 text-black rounded pt-3" style="font-size:13px; text-align:justify;">
+                <p>@Model.ShortDes</p>
+             </div>
+             <div class="col-2">
+             </div>
+             <div class="col-8 text-black">
+                <a asp-action="Details" asp-route-id="@Model.Id"  class="btn btn-dark form-control btm-sm  RoundBoreder" style="">
+                    Детали
+                </a>
+             </div>
+        </div>
+    </div>
+</div>
+

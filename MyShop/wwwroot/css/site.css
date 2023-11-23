@@ -1,0 +1,32 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+.menuItemSelect:hover {
+   background-color:gainsboro;
+}
+
+.boxShd {
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px;
+}
+
+
+.RoundBoreder {
+    border-radius: 30px;
+}
+
+.ImgRound{
+    border-radius:30px 30px 30px 30px;
+    border:2px solid  #4cff00;
+}
